@@ -230,13 +230,26 @@ public interface MenuEntrySwapperConfig extends Config
 	}
 
 	@ConfigItem(
-		position = 18,
-		keyName = "swapDecant",
+	    position = 18,
+    	keyName = "swapDecant",
 		name = "Decant",
 		description = "Swap Talk-to with Decant for Bob Barter and Murky Matt at the Grand Exchange."
 	)
-	default boolean swapDecant()
+
+    default boolean swapDecant()
 	{
 		return false;
 	}
+
+	@ConfigItem(
+		position = 19,
+		keyName = "swapTeleport",
+		name = "Dual Arena",
+		description = "Swap Remove with Duel Arena."
+    )
+
+    default boolean swapTeleport()
+{
+	return false;
+}
 }
