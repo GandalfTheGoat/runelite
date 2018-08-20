@@ -33,6 +33,7 @@ import java.util.Collections;
 import javax.inject.Inject;
 import lombok.Getter;
 import lombok.Setter;
+import lombok.extern.slf4j.Slf4j;
 import net.runelite.api.Client;
 import net.runelite.api.GameState;
 import net.runelite.api.ItemComposition;
@@ -64,6 +65,8 @@ import org.apache.commons.lang3.ArrayUtils;
 	tags = {"npcs", "inventory", "items", "objects"},
 	enabledByDefault = false
 )
+
+@Slf4j
 public class MenuEntrySwapperPlugin extends Plugin
 {
 	private static final String CONFIGURE = "Configure";
@@ -332,6 +335,7 @@ public class MenuEntrySwapperPlugin extends Plugin
 		String option = Text.removeTags(event.getOption()).toLowerCase();
 		String target = Text.removeTags(event.getTarget()).toLowerCase();
 
+		log.debug(option);
 		if (option.equals("talk-to")) {
 			if (config.swapPickpocket() && target.contains("h.a.m.")) {
 				swap("pickpocket", option, target, true);
@@ -419,8 +423,12 @@ public class MenuEntrySwapperPlugin extends Plugin
 			swap("lay", option, target, true);
 		} else if (config.swapChase() && option.equals("pick-up")) {
 			swap("chase", option, target, true);
-		} else if (config.swapTeleport() && (option.equals("remove") || option.equals("dual arena")) && shiftModifier) {
+		} else if (config.swapTeleport() && (option.equals("remove") || option.equals("dual arena")) && shiftModifier) 	{
 			swap("castle wars", option, target, true);
+		} else if (config.swapWithdraw() && option.equals("withdraw-1")) {
+			swapWithdraw("withdraw-x", option, target, true);
+		} else if (config.swapAltar() && option.equals("craft-rune")) {
+			swapWithdraw("walk here",option, target, true);
 		} else if (config.shiftClickCustomization() && shiftModifier && !option.equals("use")) {
 			Integer customOption = getSwapConfig(itemId);
 
@@ -440,7 +448,8 @@ public class MenuEntrySwapperPlugin extends Plugin
 			swap("use", option, target, true);
 		} else if (config.swapBirdhouseEmpty() && option.equals("interact") && target.contains("birdhouse")) {
 			swap("empty", option, target, true);
-		} else if (config.swapTeleport() && option.equals("remove")) {
+		} else if (config.swapTeleport() && option.equals("remove"))
+		{
 			swap("duel arena", option, target, true);
 		}
 	}
@@ -495,6 +504,29 @@ public class MenuEntrySwapperPlugin extends Plugin
 		}
 
 		return -1;
+	}
+
+	private void swapWithdraw(String optionA, String optionB, String target, boolean strict)
+	{
+		MenuEntry[] entries = client.getMenuEntries();
+		int idxA = searchIndex(entries, optionA, target, strict) + 1;
+		int idxB = searchIndex(entries, optionB, target, strict);
+		String entryOption = Text.removeTags(entries[idxA].getOption()).toLowerCase();
+		if(entryOption.equals("withdraw-10"))
+		{
+			idxA--;
+		}
+		if(entryOption.equals("craft-rune"))
+		{
+			idxA--;
+		}
+		if (idxA >= 0 && idxB >= 0)
+		{
+			MenuEntry entry = entries[idxA];
+			entries[idxA] = entries[idxB];
+			entries[idxB] = entry;
+			client.setMenuEntries(entries);
+		}
 	}
 
 	private void swap(String optionA, String optionB, String target, boolean strict)

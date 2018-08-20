@@ -81,7 +81,7 @@ public class ZulrahInstance
 
 	public void reset()
 	{
-		//rotation = null;
+		rotation = null;
 		phase = null;
 		stage = 0;
 	}
@@ -90,10 +90,10 @@ public class ZulrahInstance
 	{
 		if (rotation != null)
 		{
-			if(stage >= rotation.getRotation().size())
-			{
-			    return rotation.getPhase(0);
-			}
+			//if(stage >= rotation.getRotation().size())
+			//{
+			//    return rotation.getPhase(0);
+			//}
 			return rotation.getPhase(stage + 1);
 		}
 		else if (phase != null && phase.getType() == ZulrahType.MAGIC)

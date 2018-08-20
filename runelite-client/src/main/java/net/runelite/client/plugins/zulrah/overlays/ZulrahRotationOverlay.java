@@ -67,7 +67,11 @@ public class ZulrahRotationOverlay extends Overlay
 		{
 			return null;
 		}
-        ZulrahPhase nextPhase = instance.getNextPhase();
+		if (instance.getNextPhase() == null)
+		{
+			return null;
+		}
+		ZulrahPhase nextPhase = instance.getNextPhase();
         Color nextPhaseColor = nextPhase.getColor();
         final String rotationText = rotation.toString();
 		BufferedImage nextPhaseImage = ZulrahImageManager.getZulrahBufferedImage(nextPhase.getType());

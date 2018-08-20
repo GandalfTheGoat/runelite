@@ -252,4 +252,28 @@ public interface MenuEntrySwapperConfig extends Config
 {
 	return false;
 }
+
+	@ConfigItem(
+		position = 20,
+		keyName = "swapWithdraw",
+		name = "Withdraw",
+		description = "Swap Withdraw 1 with Withdraw x"
+	)
+
+	default boolean swapWithdraw()
+	{
+		return false;
+	}
+
+	@ConfigItem(
+		position = 21,
+		keyName = "swapAltar",
+		name = "Swap Altar",
+		description = "Swap Craft-Rune with Walk here"
+	)
+
+	default boolean swapAltar()
+	{
+		return false;
+	}
 }
